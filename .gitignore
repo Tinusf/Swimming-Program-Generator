@@ -96,3 +96,6 @@ ENV/
 
 # Output folder
 outputPlans/
+
+# My config file
+config.swim

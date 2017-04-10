@@ -11,16 +11,15 @@ Automatic swimming program generator based on desired input parameter.
 * Choose the correct seperating option (space) and the correct delimiter option (|)
 ![Step 3](images/step3.png)
 ![Step 4](images/step4.png)
-# TODO & plan  
+# TODO & plan
+* Stop using camelCase?
 * ~~Toggles for 50/25m pool, all kinds of equipment.~~
 * ~~Toggles for different strokes you want to include.~~
 * ~~Ask how hard exercise you want.~~
 * ~~Intensity from 1 to 100~~
 * ~~Output to a spreadsheet?~~
 * ~~All kinds of exercises stored in .csv file maybe?~~
-* Stop using camelCase?
-* Possible Styles: Crawl, Butterfly, Backstroke, Breaststroke, Medley, Kick, Freestyle, Special
-* Save and load settings.
-* Add some easy 100 meter freestyles after some more intense exercises.
+* ~~Save and load settings.~~
+* ~~Add some easy 100 meter freestyles after some more intense exercises.~~
 * ~~Do something with intensity~~
 * ~~toggle for allowing long distances (over 200)~~
