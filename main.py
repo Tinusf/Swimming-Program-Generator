@@ -1,5 +1,6 @@
 import csv
 import random
+import pickle
 
 settings = {}
 
@@ -17,21 +18,6 @@ hundredEZ = [1, 100, 0, "freestyle", "EZ", "05:00"]
 settings["crawl"] = True
 settings["special"] = True
 settings["freestyle"] = True
-
-
-def testingSettings():
-    # Run this function when you are testing instead of running getInput()
-    settings["intensity"] = 100
-    settings["longDistance"] = True
-    settings["breaststroke"] = True
-    settings["backstroke"] = True
-    settings["butterfly"] = True
-    settings["medley"] = True
-    settings["kick"] = True
-    settings["longDistancePool"] = False
-    settings["paddles"] = True
-    settings["fins"] = True
-    settings["targetLength"] = 4000
 
 def savePlanSpreadsheet(plan, length, fileName):
     with open("outputPlans/" + fileName + ".csv", "w", newline='') as csvfile:
@@ -114,16 +100,22 @@ def formatAndFilterExercises(exercise):
         if (settings["longDistancePool"] and not exercise[8]):
             # Filter out impossible exercises because of long distance pools.
             return
-        if (settings["intensity"] < exercise[2]):
+        if (settings
+            ["intensity"] < exercise[2]):
             return
         del exercise[8] #Delete the last boolean since it's no longer needed.
         return exercise
 
 def saveSettings():
-    pass
+    settingsFile = open("config.swim", "wb")
+    pickle.dump(settings, settingsFile)
+    settingsFile.close()
 
 def loadSettings():
-    pass
+    settingsFile = open("config.swim", "rb")
+    global settings
+    settings = pickle.load(settingsFile)
+    settingsFile.close()
 
 def getInput():
     settings["intensity"]= int(input("Intensity (1-100): "))
@@ -139,10 +131,17 @@ def getInput():
     settings["targetLength"] = int(input("About how many meters would you like to swim?"))
 
 def main():
-    getInput()
+    loadSettingsBool = bool(input("Do you want to load settings(Y or N): ").upper() == "Y")
+    if loadSettingsBool:
+        loadSettings()
+    else:
+        getInput()
     validExerciseList = loadExercises()
     plan, length = makeExcercisePlan(validExerciseList)
-    fileName = input("Please type in a file name for your newly generated plan: ")
-    savePlanSpreadsheet(plan, length, fileName)
+    fileNamePlan = input("Please type in a file name for your newly generated plan: ")
+    savePlanSpreadsheet(plan, length, fileNamePlan)
+    if not loadSettingsBool:
+        if bool(input("Do you want to save settings(Y or N): ").upper() == "Y"):
+            saveSettings()
 
 main()
