@@ -29,10 +29,6 @@ def testingSettings():
     settings["fins"] = True
     settings["targetLength"] = 3500
 
-def savePlanTxt():
-    # Don't really need this tbh.
-    pass
-
 def savePlanSpreadsheet(plan, length, fileName):
     with open("outputPlans/" + fileName + ".csv", "w", newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -43,9 +39,6 @@ def savePlanSpreadsheet(plan, length, fileName):
         spamwriter.writerow(['', '', '', '', 'Total exercise length: ' + str(length)])
     print("Saved your plan at outputPlans/" + fileName + ".csv")
     csvfile.close()
-
-def printPlan(plan):
-    pass
 
 def makeExcercisePlan(validPlans):
     currentPlan = []
@@ -81,7 +74,6 @@ def makeExcercisePlan(validPlans):
     currentPlan.append(warmDownExercise)
     return currentPlan, totalLength
 
-
 def loadExercises():
     validExerciseList = []
     with open("sets/list.csv", newline='') as csvfile:
@@ -114,7 +106,6 @@ def formatAndFilterExercises(excercise):
         del excercise[8] #Delete the last boolean since it's no longer needed.
         return excercise
 
-
 def saveSettings():
     pass
 
@@ -139,6 +130,5 @@ def main():
     plan, length = makeExcercisePlan(validExerciseList)
     fileName = input("Please type in a file name for your newly generated plan: ")
     savePlanSpreadsheet(plan, length, fileName)
-    printPlan(plan)
 
 main()
