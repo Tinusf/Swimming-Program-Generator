@@ -50,9 +50,9 @@ def printPlan(plan):
 def makeExcercisePlan(validPlans):
     currentPlan = []
     totalLength = 0
+
     totalDelta = deltaLength + (warmDownExercise[1] * warmDownExercise[0])
     # This is the length of the warm down plus the deltaLength.
-    print(totalDelta)
     currentPlan.append(warmUpExercise)
     totalLength += warmUpExercise[0] * warmUpExercise[1]
     while totalLength < settings["targetLength"] + totalDelta:
@@ -134,10 +134,8 @@ def getInput():
     settings["targetLength"] = int(input("About how many meters would you like to swim?"))
 
 def main():
-    #getInput()
-    testingSettings()
+    getInput()
     validExerciseList = loadExercises()
-    print(validExerciseList)
     plan, length = makeExcercisePlan(validExerciseList)
     fileName = input("Please type in a file name for your newly generated plan: ")
     savePlanSpreadsheet(plan, length, fileName)
