@@ -7,10 +7,13 @@ settings = {}
 chanceForFins = 10 #% chance
 chanceForPaddles = 10 #% chance
 
+longDistanceLimit = 200 # How long until it's considered long distance
+deltaLimit = 300 # How many less meters is ok.
+
 warmUpExercise = [1, 400, 0, "freestyle", "Warm up", "05:00"]
 warmDownExercise = [1, 200, 0, "freestyle", "Warm down", "05:00"]
+hundredEZ = [1, 100, 0, "freestyle", "EZ", "05:00"]
 
-deltaLength = 500 # Maybe rename this variable to something else?
 settings["crawl"] = True
 settings["special"] = True
 settings["freestyle"] = True
@@ -18,17 +21,17 @@ settings["freestyle"] = True
 
 def testingSettings():
     # Run this function when you are testing instead of running getInput()
-    settings["intensity"] = 50
+    settings["intensity"] = 100
     settings["longDistance"] = True
     settings["breaststroke"] = True
-    settings["backstroke"] = False
-    settings["butterfly"] = False
-    settings["medley"] = False
+    settings["backstroke"] = True
+    settings["butterfly"] = True
+    settings["medley"] = True
     settings["kick"] = True
     settings["longDistancePool"] = False
     settings["paddles"] = True
     settings["fins"] = True
-    settings["targetLength"] = 3500
+    settings["targetLength"] = 4000
 
 def savePlanSpreadsheet(plan, length, fileName):
     with open("outputPlans/" + fileName + ".csv", "w", newline='') as csvfile:
@@ -45,18 +48,19 @@ def makeExcercisePlan(validPlans):
     currentPlan = []
     totalLength = 0
 
-    totalDelta = deltaLength + (warmDownExercise[1] * warmDownExercise[0])
-    # This is the length of the warm down plus the deltaLength.
     currentPlan.append(warmUpExercise)
     totalLength += warmUpExercise[0] * warmUpExercise[1]
-    while totalLength < settings["targetLength"] + totalDelta:
+    while totalLength < settings["targetLength"] - deltaLimit:
         curRNG = random.randint(0, len(validPlans) -1)
         curExercise = validPlans[curRNG]
         curLength = (curExercise[0] * curExercise[1])
-        if (totalLength + curLength) < settings["targetLength"] + totalDelta:
+        if (totalLength + curLength) < settings["targetLength"]:
             curExerciseFormat = formatDescription(curExercise)
             currentPlan.append(curExerciseFormat)
             totalLength += curLength
+            if (curExerciseFormat[2] >= 75): # If high intensity
+                currentPlan.append(hundredEZ)
+                totalLength += hundredEZ[1]
         del validPlans[curRNG] # Delete it in both cases: impossible to do and added in the plan.
 
         if (len(validPlans) < 1):
@@ -102,7 +106,7 @@ def formatAndFilterExercises(exercise):
         exercise[6] = exercise[6] == "Y"
         exercise[7] = exercise[7] == "Y"
         exercise[8] = exercise[8] == "Y"
-        if (settings["longDistance"] and exercise[1] > 200):
+        if (settings["longDistance"] and exercise[1] > longDistanceLimit):
             return
         for styles in (exercise[3].split(" ")): # Filter out unwanted swimming styles.
             if not settings[styles]:
