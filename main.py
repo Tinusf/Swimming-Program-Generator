@@ -1,6 +1,7 @@
 import csv
 import random
 import pickle
+import os
 
 settings = {}
 
@@ -130,7 +131,12 @@ def getInput():
     settings["fins"] = bool(input("Want to use fins?(Y or N): ").upper() == "Y")
     settings["targetLength"] = int(input("About how many meters would you like to swim?"))
 
+def checkDirOutput():
+    if not os.path.isdir("outputPlans"):
+        os.makedirs("outputPlans")
+
 def main():
+    checkDirOutput()
     loadSettingsBool = bool(input("Do you want to load settings(Y or N): ").upper() == "Y")
     if loadSettingsBool:
         loadSettings()
