@@ -7,8 +7,8 @@ settings = {}
 chanceForFins = 50 #% chance
 chanceForPaddles = 50 #% chance
 
-warmUpExercise = [1, 400, 20, "freestyle", "Warm up", "05:00"]
-warmDownExercise = [1, 200, 20, "freestyle", "Warm down", "05:00"]
+warmUpExercise = [1, 400, 0, "freestyle", "Warm up", "05:00"]
+warmDownExercise = [1, 200, 0, "freestyle", "Warm down", "05:00"]
 
 deltaLength = 500 # Maybe rename this variable to something else?
 settings["crawl"] = True
@@ -19,6 +19,7 @@ settings["freestyle"] = True
 def testingSettings():
     # Run this function when you are testing instead of running getInput()
     settings["intensity"] = 50
+    settings["longDistance"] = True
     settings["breastroke"] = True
     settings["backstroke"] = False
     settings["butterfly"] = False
@@ -56,11 +57,8 @@ def makeExcercisePlan(validPlans):
             curExerciseFormat = formatDescription(curExercise)
             currentPlan.append(curExerciseFormat)
             totalLength += curLength
-            del validPlans[curRNG] #Do this when you have enough different exercises.
-        else:
-            # TODO, Try again with a shorter exercise.
-            # Maybe just delete it from the list and try again, but after a while it should stop trying.
-            break
+        del validPlans[curRNG] # Delete it in both cases: impossible to do and added in the plan.
+
         if (len(validPlans) < 1):
             print("Not enough plans to add more exercises.")
             break
@@ -93,26 +91,27 @@ def loadExercises():
     csvfile.close()
     return validExerciseList
 
-def formatAndFilterExercises(excercise):
-    if (excercise[0] != "Repetitions"): # Filter out the very first line (there probably is a better way to do this.
+def formatAndFilterExercises(exercise):
+    if (exercise[0] != "Repetitions"): # Filter out the very first line (there probably is a better way to do this.
         # The first 3 should be ints.
-        excercise[0] = int(excercise[0])
-        excercise[1] = int(excercise[1])
-        excercise[2] = int(excercise[2])
+        exercise[0] = int(exercise[0])
+        exercise[1] = int(exercise[1])
+        exercise[2] = int(exercise[2])
 
         # The last three should be booleans.
-        excercise[6] = excercise[6] == "Y"
-        excercise[7] = excercise[7] == "Y"
-        excercise[8] = excercise[8] == "Y"
-
-        for styles in (excercise[3].split(" ")): # Filter out unwanted swimming styles.
+        exercise[6] = exercise[6] == "Y"
+        exercise[7] = exercise[7] == "Y"
+        exercise[8] = exercise[8] == "Y"
+        if (settings["longDistance"] and exercise[1] > 200):
+            return
+        for styles in (exercise[3].split(" ")): # Filter out unwanted swimming styles.
             if not settings[styles]:
                 return
-        if (settings["longDistancePool"] and not excercise[8]):
+        if (settings["longDistancePool"] and not exercise[8]):
             # Filter out impossible exercises because of long distance pools.
             return
-        del excercise[8] #Delete the last boolean since it's no longer needed.
-        return excercise
+        del exercise[8] #Delete the last boolean since it's no longer needed.
+        return exercise
 
 def saveSettings():
     pass
@@ -122,6 +121,7 @@ def loadSettings():
 
 def getInput():
     settings["intensity"]= int(input("Intensity (1-100): "))
+    settings["longDistance"] = bool(input("Allow long distances? (over 200m)(Y or N): ").upper() == "Y")
     settings["breastroke"] = bool(input("Want to swim breaststroke?(Y or N): ").upper() == "Y")
     settings["backstroke"] = bool(input("Want to swim backstroke?(Y or N): ").upper() == "Y")
     settings["butterfly"] = bool(input("Want to swim butterfly?(Y or N): ").upper() == "Y")

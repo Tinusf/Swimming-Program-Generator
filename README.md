@@ -21,4 +21,6 @@ Automatic swimming program generator based on desired input parameter.
 * Stop using camelCase?
 * Possible Styles: Crawl, Butterfly, Backstroke, Breaststroke, Medley, Kick, Freestyle, Special
 * Save and load settings.
-*
+* Add some easy 100 meter freestyles after some more intense exercises.
+* Do something with intensity (important)
+* ~~toggle for allowing long distances (over 200)~~
