@@ -7,8 +7,8 @@ settings = {}
 chanceForFins = 50 #% chance
 chanceForPaddles = 50 #% chance
 
-warmUpExercise = [1, 400, 20, "freestyle", "Warm up", "05:00", False, False]
-warmDownExercise = [1, 200, 20, "freestyle", "Warm down", "05:00", False, False]
+warmUpExercise = [1, 400, 20, "freestyle", "Warm up", "05:00"]
+warmDownExercise = [1, 200, 20, "freestyle", "Warm down", "05:00"]
 
 deltaLength = 500 # Maybe rename this variable to something else?
 settings["crawl"] = True
@@ -32,7 +32,7 @@ def testingSettings():
 def savePlanSpreadsheet(plan, length, fileName):
     with open("outputPlans/" + fileName + ".csv", "w", newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(['Reps', 'Dist', 'Intensity', 'Style(s)', 'Description', 'Start time / Pause', 'Fins', 'Paddles'])
+        spamwriter.writerow(['Reps', 'Dist', 'Intensity', 'Style(s)', 'Description', 'Start time / Pause'])
         for exercise in plan:
             print(exercise)
             spamwriter.writerow(exercise)
@@ -53,26 +53,34 @@ def makeExcercisePlan(validPlans):
         curExercise = validPlans[curRNG]
         curLength = (curExercise[0] * curExercise[1])
         if (totalLength + curLength) < settings["targetLength"] + totalDelta:
-            if (settings["paddles"] and curExercise[7]):
-                curExercise[7] = chanceForPaddles >= random.randint(1, 100)
-            else:
-                curExercise[7] = False
-
-            if (settings["fins"] and curExercise[6]):
-                curExercise[6] = chanceForFins >= random.randint(1, 100)
-            else:
-                curExercise[6] = False
-
-            currentPlan.append(curExercise)
+            curExerciseFormat = formatDescription(curExercise)
+            currentPlan.append(curExerciseFormat)
             totalLength += curLength
-            # del validPlans[curRNG] #Do this when you have enough different exercises.
+            del validPlans[curRNG] #Do this when you have enough different exercises.
         else:
             # TODO, Try again with a shorter exercise.
             # Maybe just delete it from the list and try again, but after a while it should stop trying.
             break
+        if (len(validPlans) < 1):
+            print("Not enough plans to add more exercises.")
+            break
     totalLength += warmDownExercise[0] * warmDownExercise[1]
     currentPlan.append(warmDownExercise)
     return currentPlan, totalLength
+
+def formatDescription(exercise):
+    exercise[4] = str(exercise[0]) + " * " + str(exercise[1]) + " " + exercise[4]
+    if settings["paddles"] and exercise[7]:
+        if chanceForPaddles >= random.randint(1, 100):
+            exercise[4] += ", with paddles"
+
+    if (settings["fins"] and exercise[6]):
+        if chanceForFins >= random.randint(1, 100):
+            exercise[4] += ", with fins"
+
+    del exercise[7]
+    del exercise[6]
+    return exercise
 
 def loadExercises():
     validExerciseList = []
