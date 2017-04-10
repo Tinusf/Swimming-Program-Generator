@@ -4,8 +4,8 @@ import random
 settings = {}
 
 # Default settings, you can change these if you want to.
-chanceForFins = 10 #% chance
-chanceForPaddles = 10 #% chance
+chanceForFins = 50 #% chance
+chanceForPaddles = 50 #% chance
 
 warmUpExercise = [1, 400, 20, "freestyle", "Warm up", "05:00", False, False]
 warmDownExercise = [1, 200, 20, "freestyle", "Warm down", "05:00", False, False]
@@ -42,6 +42,7 @@ def savePlanSpreadsheet(plan, length, fileName):
             spamwriter.writerow(exercise)
         spamwriter.writerow(['', '', '', '', 'Total exercise length: ' + str(length)])
     print("Saved your plan at outputPlans/" + fileName + ".csv")
+    csvfile.close()
 
 def printPlan(plan):
     pass
@@ -55,11 +56,26 @@ def makeExcercisePlan(validPlans):
     currentPlan.append(warmUpExercise)
     totalLength += warmUpExercise[0] * warmUpExercise[1]
     while totalLength < settings["targetLength"] + totalDelta:
-        curExercise = validPlans[random.randint(0, len(validPlans) -1)]
-        if (totalLength + (curExercise[0] * curExercise[1])) < settings["targetLength"] + totalDelta:
+        curRNG = random.randint(0, len(validPlans) -1)
+        curExercise = validPlans[curRNG]
+        curLength = (curExercise[0] * curExercise[1])
+        if (totalLength + curLength) < settings["targetLength"] + totalDelta:
+            if (settings["paddles"] and curExercise[7]):
+                curExercise[7] = chanceForPaddles >= random.randint(1, 100)
+            else:
+                curExercise[7] = False
+
+            if (settings["fins"] and curExercise[6]):
+                curExercise[6] = chanceForFins >= random.randint(1, 100)
+            else:
+                curExercise[6] = False
+
             currentPlan.append(curExercise)
-            totalLength += curExercise[0] * curExercise[1]
+            totalLength += curLength
+            # del validPlans[curRNG] #Do this when you have enough different exercises.
         else:
+            # TODO, Try again with a shorter exercise.
+            # Maybe just delete it from the list and try again, but after a while it should stop trying.
             break
     totalLength += warmDownExercise[0] * warmDownExercise[1]
     currentPlan.append(warmDownExercise)
