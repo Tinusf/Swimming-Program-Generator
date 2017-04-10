@@ -10,3 +10,5 @@ Automatic swimming program generator based on desired input parameter.
 * All kinds of exercises stored in .txt files maybe?
 * Stop using camelCase?
 * Possible Styles: Crawl, Butterfly, Backstroke, Breaststroke, Medley, Kick, Freestyle, Special
+
+# How to use it:

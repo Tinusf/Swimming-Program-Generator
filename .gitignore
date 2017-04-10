@@ -93,3 +93,6 @@ ENV/
 
 # Office lock file
 *.csv#
+
+# Output folder
+outputPlans/
