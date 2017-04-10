@@ -4,8 +4,8 @@ import random
 settings = {}
 
 # Default settings, you can change these if you want to.
-chanceForFins = 50 #% chance
-chanceForPaddles = 50 #% chance
+chanceForFins = 10 #% chance
+chanceForPaddles = 10 #% chance
 
 warmUpExercise = [1, 400, 0, "freestyle", "Warm up", "05:00"]
 warmDownExercise = [1, 200, 0, "freestyle", "Warm down", "05:00"]
@@ -20,7 +20,7 @@ def testingSettings():
     # Run this function when you are testing instead of running getInput()
     settings["intensity"] = 50
     settings["longDistance"] = True
-    settings["breastroke"] = True
+    settings["breaststroke"] = True
     settings["backstroke"] = False
     settings["butterfly"] = False
     settings["medley"] = False
@@ -110,6 +110,8 @@ def formatAndFilterExercises(exercise):
         if (settings["longDistancePool"] and not exercise[8]):
             # Filter out impossible exercises because of long distance pools.
             return
+        if (settings["intensity"] < exercise[2]):
+            return
         del exercise[8] #Delete the last boolean since it's no longer needed.
         return exercise
 
@@ -122,7 +124,7 @@ def loadSettings():
 def getInput():
     settings["intensity"]= int(input("Intensity (1-100): "))
     settings["longDistance"] = bool(input("Allow long distances? (over 200m)(Y or N): ").upper() == "Y")
-    settings["breastroke"] = bool(input("Want to swim breaststroke?(Y or N): ").upper() == "Y")
+    settings["breaststroke"] = bool(input("Want to swim breaststroke?(Y or N): ").upper() == "Y")
     settings["backstroke"] = bool(input("Want to swim backstroke?(Y or N): ").upper() == "Y")
     settings["butterfly"] = bool(input("Want to swim butterfly?(Y or N): ").upper() == "Y")
     settings["medley"] = bool(input("Want to swim medley?(Y or N): ").upper() == "Y")
