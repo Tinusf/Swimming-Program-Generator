@@ -120,16 +120,16 @@ def loadSettings():
 
 def getInput():
     settings["intensity"]= int(input("Intensity (1-100): "))
-    settings["longDistance"] = bool(input("Allow long distances? (over 200m)(Y or N): ").upper() == "Y")
-    settings["breaststroke"] = bool(input("Want to swim breaststroke?(Y or N): ").upper() == "Y")
-    settings["backstroke"] = bool(input("Want to swim backstroke?(Y or N): ").upper() == "Y")
-    settings["butterfly"] = bool(input("Want to swim butterfly?(Y or N): ").upper() == "Y")
-    settings["medley"] = bool(input("Want to swim medley?(Y or N): ").upper() == "Y")
-    settings["kick"] = bool(input("Want to do kicks?(Y or N): ").upper() == "Y")
-    settings["longDistancePool"] = bool(input("Swimming in long distance pool?(Y (50m) or N (25m): ").upper() == "Y")
-    settings["paddles"] = bool(input("Want to use paddles?(Y or N): ").upper() == "Y")
-    settings["fins"] = bool(input("Want to use fins?(Y or N): ").upper() == "Y")
-    settings["targetLength"] = int(input("About how many meters would you like to swim?"))
+    settings["longDistance"] = bool(input("Allow long distances? (over 200m) (Y or N): ").upper() == "Y")
+    settings["breaststroke"] = bool(input("Want to swim breaststroke? (Y or N): ").upper() == "Y")
+    settings["backstroke"] = bool(input("Want to swim backstroke? (Y or N): ").upper() == "Y")
+    settings["butterfly"] = bool(input("Want to swim butterfly? (Y or N): ").upper() == "Y")
+    settings["medley"] = bool(input("Want to swim medley? (Y or N): ").upper() == "Y")
+    settings["kick"] = bool(input("Want to do kicks? (Y or N): ").upper() == "Y")
+    settings["longDistancePool"] = bool(input("Swimming in long distance pool? (Y (50m) or N (25m): ").upper() == "Y")
+    settings["paddles"] = bool(input("Want to use paddles? (Y or N): ").upper() == "Y")
+    settings["fins"] = bool(input("Want to use fins? (Y or N): ").upper() == "Y")
+    settings["targetLength"] = int(input("About how many meters would you like to swim? "))
 
 def checkDirOutput():
     if not os.path.isdir("outputPlans"):
